@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     
+     <!-- Tailwind -->
+     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+     <!-- Axios & Jquery -->
+     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+     <style>
+          body { font-family: 'Source Sans Pro', sans-serif; }
+     </style>
+
+     <title>Edge Detection</title>
+</head>
+<body>
+     <main class="min-h-screen w-full bg-white">
+          <div class="p-6" x-data="app">
+               <section class="top-1/2 left-1/2 mx-auto max-w-sm space-y-4 text-center">
+               <!-- register content -->
+               <div class="space-y-4">
+                    <header class="mb-3 text-2xl font-bold">Upload Image</header>
+                    
+                    <div class="w-full rounded-2xl bg-gray-50 h-56 border-2 border-dashed border-blue-300 rounded appearance-none focus:outline-none focus:shadow-outline">
+                         <div class="grid content-center h-full relative">
+                              
+                              <span class="material-icons text-blue-400 z-10" style="font-size: 100px;">
+                                   <button class="w-auto" id="btn-upload">&#xe43e;</button>
+                              </span>
+                              <img class="hidden absolute object-cover h-full w-full rounded-2xl opacity-75 hover:opacity-100 cursor-pointer"
+                                   id="output"/>
+                         </div>
+                    </div>
+                    <div class="hidden">
+                         <input
+                         type="file"
+                         placeholder="Upload Image"
+                         accept="image/png, image/gif, image/jpeg"
+                         class="my-3 w-full border-none bg-transparent outline-none focus:outline-none"
+                         id="ipt-file"
+                         />
+                    </div>
+                    <button
+                         class="w-full rounded-2xl border-b-4 border-b-blue-600 bg-blue-500 py-3 font-bold text-white hover:bg-blue-400 active:translate-y-[0.125rem]"
+                         id="btn-edge"
+                    >
+                         DETECT EDGES
+                    </button>
+               </div>
+               </section>
+          </div>
+     </main>
+
+     <div class="container-sm">
+     <div class="card m-5 p-3">
+          <div class="card-body">
+               <h5 class="card-title">Sobel & Canny Edge Detection Methods</h5>
+               <p class="card-text">Upload image file and see the comparison</p>
+
+               <br>
+
+               <form action="/" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                         <input class="form-control" type="file" name="fileInput">
+                    </div>
+                    <button type="submit" class="">Compress</button>
+               </form>
+          </div>
+     </div>
+     </div>
+
+</body>
+</html>
+
+<script>
+$(document).ready(function(){
+     $('#btn-upload').click(function(){
+          $('#ipt-file').click();          
+     });
+
+     $("#ipt-file").change(function(){
+          let file = $("#ipt-file").prop('files')[0];
+          $("#output").attr("src", URL.createObjectURL(file));
+          $("#output").toggleClass("hidden");
+
+          $("#btn-upload").hide();
+          console.log(URL.createObjectURL(file));
+     });
+
+     $('#btn-edge').click(function(){
+          axios.get('/test')
+               .then(res => {
+                    console.log(res.data);
+               })
+               .catch(err => {
+                    console.log(err);
+               })
+     });
+});
+</script>
