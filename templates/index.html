@@ -22,9 +22,7 @@
 </head>
 <body>
      <main class="min-h-screen w-full bg-white">
-          <div class="p-6" x-data="app">
-               <section class="top-1/2 left-1/2 mx-auto max-w-sm space-y-4 text-center">
-               <!-- register content -->
+          <div class="p-6 grid grid-cols-3 gap-4 top-1/2 left-1/2 mx-auto max-w-4xl text-center">
                <div class="space-y-4">
                     <header class="mb-3 text-2xl font-bold">Upload Image</header>
                     
@@ -34,7 +32,7 @@
                               <span class="material-icons text-blue-400 z-10" style="font-size: 100px;">
                                    <button class="w-auto" id="btn-upload">&#xe43e;</button>
                               </span>
-                              <img class="hidden absolute object-cover h-full w-full rounded-2xl opacity-75 hover:opacity-100 cursor-pointer"
+                              <img class="hidden absolute object-cover h-full w-full rounded-2xl"
                                    id="output"/>
                          </div>
                     </div>
@@ -54,7 +52,36 @@
                          DETECT EDGES
                     </button>
                </div>
-               </section>
+
+               <div class="space-y-4">
+                    <header class="mb-3 text-2xl font-bold">Sobel Operator</header>
+                    
+                    <div class="w-full rounded-2xl bg-gray-50 h-56 border-2 border-dashed border-blue-300 rounded appearance-none focus:outline-none focus:shadow-outline">
+                         <div class="grid content-center h-full relative">
+                              
+                              <span class="result material-icons text-blue-400 z-10" style="font-size: 100px;">
+                                   &#xe3f4;
+                              </span>
+                              <img class="hidden absolute object-cover h-full w-full rounded-2xl"
+                                   id="output-sobel"/>
+                         </div>
+                    </div>
+               </div>
+
+               <div class="space-y-4">
+                    <header class="mb-3 text-2xl font-bold">Canny Operator</header>
+                    
+                    <div class="w-full rounded-2xl bg-gray-50 h-56 border-2 border-dashed border-blue-300 rounded appearance-none focus:outline-none focus:shadow-outline">
+                         <div class="grid content-center h-full relative">
+                              
+                              <span class="result material-icons text-blue-400 z-10" style="font-size: 100px;">
+                                   &#xe3f4;
+                              </span>
+                              <img class="hidden absolute object-cover h-full w-full rounded-2xl"
+                                   id="output-canny"/>
+                         </div>
+                    </div>
+               </div>
           </div>
      </main>
 
@@ -95,9 +122,20 @@ $(document).ready(function(){
      });
 
      $('#btn-edge').click(function(){
-          axios.get('/test')
+          let file = $("#ipt-file").prop('files')[0];
+          let data = new FormData(); 
+          data.append('fileInput', file);
+
+          axios.post('/upload', data)
                .then(res => {
-                    console.log(res.data);
+                    // console.log(res.data);
+                    $("#output-sobel").attr("src", res.data.sobel);
+                    $("#output-sobel").toggleClass("hidden");
+
+                    $("#output-canny").attr("src", res.data.canny);
+                    $("#output-canny").toggleClass("hidden");
+
+                    $(".result").hide();
                })
                .catch(err => {
                     console.log(err);
